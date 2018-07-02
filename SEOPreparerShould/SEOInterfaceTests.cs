@@ -56,6 +56,7 @@ namespace SEO.Tests.SEOInterfaceTests
         [TestMethod]
         public void FindUsersFromAmersfoort()
         {
+            // stub
             UserStub user = new UserStub();
             user.SetProfile(new List<string> { "Bram", "Junior Developer", "Amersfoort" });
             UserRepositoryStub repo = new UserRepositoryStub();
