@@ -103,6 +103,7 @@ namespace SEO.Tests.SEOInterfaceTests
             userRepository.Setup(repository => repository.SaveNewUser("bob", new List<string>() { "developer" }));
 
             UserService userService = new UserService();
+            userService.preparer = new SEOPreparer();
             userService.userRepository = userRepository.Object;
 
             userService.RegisterUser("bob", "Developer");

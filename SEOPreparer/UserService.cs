@@ -14,9 +14,8 @@ namespace SEO
 
         public void RegisterUser(string name, string profile)
         {
-            userRepository.SaveNewUser(name, new List<string>() { profile });
-          
-            
+            List<string> searchTerms = preparer.ExtractSearchTerms(profile).ToList();
+            userRepository.SaveNewUser(name, searchTerms);
         }
     }
 }
