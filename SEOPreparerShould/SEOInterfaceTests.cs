@@ -75,5 +75,20 @@ namespace SEO.Tests.SEOInterfaceTests
                 Assert.IsTrue(currentUser.Profile().Contains("Amersfoort"));
             }
         }
+        [TestMethod]
+        public void SaveNewUser()
+        {
+            /* "francine", "helpdesk hrm" => User("francine", profile: "hrm", "helpdesk")
+             * "bob", "developer" => User("bob", profile: "developer")
+             * "chris", "" => Exception ()  //Not a User("chris", profile "")
+             *  "", "c# developer" => Exception() 
+             *  "bob", "developer" => Exception() // allready exists
+             * */
+            userRepository.Setup(repository => repository.SaveNewUser("francine", new List<string>() { "helpdesk", "hrm" }));
+
+            searchEngine.SetRepository(userRepository.Object);
+            userRepository.VerifyAll();
+
+        }
     }
 }
