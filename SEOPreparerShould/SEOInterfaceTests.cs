@@ -13,7 +13,8 @@ namespace SEO.Tests.SEOInterfaceTests
     {
         Mock<IUser> user = new Mock<IUser>();
         Mock<IUserRepository> userRepository = new Mock<IUserRepository>();
-        
+
+        UserService userService = new UserService();
 
         SearchEngine searchEngine = new SearchEngine();
 
@@ -87,10 +88,8 @@ namespace SEO.Tests.SEOInterfaceTests
              *  "bob", "developer" => Exception() // allready exists
              * */
 
+            prepareUserService();
             userRepository.Setup(repository => repository.SaveNewUser("bob", new List<string>() { "developer" }));
-
-            UserService userService = new UserService();
-            userService.userRepository = userRepository.Object;
 
             userService.RegisterUser("bob", "developer");
             
@@ -98,33 +97,29 @@ namespace SEO.Tests.SEOInterfaceTests
         }
 
         [TestMethod]
-        public void SaveNewParsedUser()
+        public void SaveNewParsedUserProfile()
         {
-            userRepository.Setup(repository => repository.SaveNewUser("bob", new List<string>() { "developer" }));
+            prepareUserService();
 
-            UserService userService = prepareUserService();
             userService.RegisterUser("bob", "Developer");
 
-            userRepository.VerifyAll();
+            userRepository.Verify(repository => repository.SaveNewUser("bob", new List<string>() { "developer" }));
         }
+
 
         [TestMethod]
-        public void SaveNewParsedUserName()
+        public void SaveNewParsedUsername()
         {
-            userRepository.Setup(repository => repository.SaveNewUser("bob", new List<string>() { "developer" }));
-
-            UserService userService = prepareUserService();
+            prepareUserService();
             userService.RegisterUser("Bob", "Developer");
 
-            userRepository.VerifyAll();
+            userRepository.Verify(repository => repository.SaveNewUser("bob", new List<string>() { "developer" }));
         }
-
-        private UserService prepareUserService()
+    
+        private void prepareUserService()
         {
-            UserService userService = new UserService();
             userService.preparer = new SEOPreparer();
             userService.userRepository = userRepository.Object;
-            return userService;
         }
     }
 }
