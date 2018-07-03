@@ -4,26 +4,30 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SEO.Tests.Stubs;
 using System.Linq;
+using Moq;
 
 namespace SEO.Tests.SEOInterfaceTests
 {
-    /// <summary>
-    /// Summary description for SEOInterfaceTests
-    /// </summary>
     [TestClass]
     public class SEOInterfaceTests
     {
+        Mock<IUser> user = new Mock<IUser>();
+        Mock<IUserRepository> userRepository = new Mock<IUserRepository>();
+
         SearchEngine searchEngine = new SearchEngine();
 
         [TestMethod]
         public void FindSingleUser()
         {
-            UserStub user = new UserStub();
-            UserRepositoryStub repo = new UserRepositoryStub();
-            repo.users = new List<IUser>() { user };
+            userRepository.Setup(repo => repo.FindBy("developer")).Returns(new List<IUser>() { user.Object });
+            userRepository.Setup(repo => repo.FindBy("c")).Returns(new List<IUser>() { user.Object });
 
-            searchEngine.SetRepository(repo);
-            List<IUser> users = searchEngine.Search("Francine C# Developer Delft");
+            searchEngine.SetRepository(userRepository.Object);
+
+            List<IUser> users = searchEngine.Search("developer");
+            List<IUser> users2 = searchEngine.Search("c");
+
+            userRepository.VerifyAll();
             Assert.AreEqual(1, users.Count);
         }
 
