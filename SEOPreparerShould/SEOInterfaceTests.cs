@@ -108,6 +108,17 @@ namespace SEO.Tests.SEOInterfaceTests
             userRepository.VerifyAll();
         }
 
+        [TestMethod]
+        public void SaveNewParsedUserName()
+        {
+            userRepository.Setup(repository => repository.SaveNewUser("bob", new List<string>() { "developer" }));
+
+            UserService userService = prepareUserService();
+            userService.RegisterUser("Bob", "Developer");
+
+            userRepository.VerifyAll();
+        }
+
         private UserService prepareUserService()
         {
             UserService userService = new UserService();
