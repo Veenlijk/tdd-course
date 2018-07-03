@@ -76,6 +76,7 @@ namespace SEO.Tests.SEOInterfaceTests
                 Assert.IsTrue(currentUser.Profile().Contains("Amersfoort"));
             }
         }
+
         [TestMethod]
         public void SaveNewUser()
         {
@@ -96,10 +97,17 @@ namespace SEO.Tests.SEOInterfaceTests
             userRepository.VerifyAll();
         }
 
-        //[TestMethod]
-        //public void SaveNamelessUser()
-        //{
+        [TestMethod]
+        public void SaveNewParsedUser()
+        {
+            userRepository.Setup(repository => repository.SaveNewUser("bob", new List<string>() { "developer" }));
 
-        //}
+            UserService userService = new UserService();
+            userService.userRepository = userRepository.Object;
+
+            userService.RegisterUser("bob", "Developer");
+
+            userRepository.VerifyAll();
+        }
     }
 }
