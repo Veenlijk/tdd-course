@@ -8,13 +8,15 @@ namespace SEO
 {
     public class UserService
     {
-        IUserRepository userRepository { get; set; }
+        public IUserRepository userRepository { get; set; }
 
         public SEOPreparer preparer { get; set; }
 
         public void RegisterUser(string name, string profile)
         {
-
+            userRepository.SaveNewUser(name, new List<string>() { profile });
+          
+            
         }
     }
 }

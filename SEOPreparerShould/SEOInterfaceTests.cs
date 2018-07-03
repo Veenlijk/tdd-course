@@ -13,6 +13,7 @@ namespace SEO.Tests.SEOInterfaceTests
     {
         Mock<IUser> user = new Mock<IUser>();
         Mock<IUserRepository> userRepository = new Mock<IUserRepository>();
+        
 
         SearchEngine searchEngine = new SearchEngine();
 
@@ -84,11 +85,21 @@ namespace SEO.Tests.SEOInterfaceTests
              *  "", "c# developer" => Exception() 
              *  "bob", "developer" => Exception() // allready exists
              * */
-            userRepository.Setup(repository => repository.SaveNewUser("francine", new List<string>() { "helpdesk", "hrm" }));
 
-            searchEngine.SetRepository(userRepository.Object);
+            userRepository.Setup(repository => repository.SaveNewUser("bob", new List<string>() { "developer" }));
+
+            UserService userService = new UserService();
+            userService.userRepository = userRepository.Object;
+
+            userService.RegisterUser("bob", "developer");
+            
             userRepository.VerifyAll();
-
         }
+
+        //[TestMethod]
+        //public void SaveNamelessUser()
+        //{
+
+        //}
     }
 }
